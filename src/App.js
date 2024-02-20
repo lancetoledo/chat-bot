@@ -1,47 +1,57 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import OpenAI from 'openai'
-
+import openai from 'openai';
 
 function App() {
-  const temp = "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"
   const [inputMessage, setInputMessage] = useState('');
   const [chatHistory, setChatHistory] = useState([]);
-
-  const openai = new OpenAI({ apiKey: temp, dangerouslyAllowBrowser: true })
-  async function main() {
-    const completion = await openai.chat.completions.create({
-      messages: [{ role: "system", content: "You are a helpful assistant." }],
-      model: "gpt-3.5-turbo",
-    });
-
-    console.log(completion.choices[0]);
-  }
-
-  // main();
+  const [openaiInstance, setOpenaiInstance] = useState(null);
 
   useEffect(() => {
-    main()
-  }, [])
+    // Initialize the OpenAI instance with your API key
+    const initializeOpenAI = async () => {
+      try {
+        const instance = new openai.OpenAI({ apiKey: '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', dangerouslyAllowBrowser: true }); // Replace with your actual OpenAI API key
+        console.log('OpenAI instance:', instance.chat.completions); // Check the instance object
+        setOpenaiInstance(instance);
+      } catch (error) {
+        console.error('Error initializing OpenAI:', error);
+      }
+    };
 
-  // Simulated chatbot AI reply function
-  const getChatbotReply = async (message) => {
-    // Here, you would typically send the message to a backend/API to get a reply from the chatbot AI.
-    // For this example, let's simulate a reply after a short delay.
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve({ sender: 'ChatBot', message: `You said: "${message}"` });
-      }, 1000);
-    });
+    initializeOpenAI();
+  }, []);
+
+  const sendMessage = async (message) => {
+    if (openaiInstance && message.trim() !== '') {
+      try {
+        const response = await openaiInstance.chat.completions.create({
+          model: "gpt-3.5-turbo",
+          messages: [{ role: 'user', content: message }],
+        });
+        console.log('Response:', response); // Log the entire response object
+        console.log('Response data:', response.choices); // Log the data object
+        const choices = response.choices;
+        if (choices && choices.length > 0) {
+          const botReply = choices[0].message.content.trim();
+          setChatHistory(prevHistory => [...prevHistory, { sender: 'ChatBot', message: botReply }]);
+        } else {
+          console.error('Error: Choices array is empty or undefined');
+        }
+      } catch (error) {
+        console.error('Error generating bot reply:', error);
+      }
+    }
   };
 
-  // Function to handle sending messages
-  const sendMessage = async () => {
+
+
+
+  const handleSendMessage = () => {
     if (inputMessage.trim() !== '') {
       const userMessage = { sender: 'You', message: inputMessage };
-      setChatHistory(prevHistory => [...prevHistory, userMessage]); // Update user's message first
-      const botReply = await getChatbotReply(inputMessage); // Get bot's reply
-      setChatHistory(prevHistory => [...prevHistory, botReply]); // Update chat history with bot's reply
+      setChatHistory(prevHistory => [...prevHistory, userMessage]);
+      sendMessage(inputMessage);
       setInputMessage('');
     }
   };
@@ -75,11 +85,11 @@ function App() {
             onChange={(e) => setInputMessage(e.target.value)}
             onKeyPress={(e) => {
               if (e.key === 'Enter') {
-                sendMessage();
+                handleSendMessage();
               }
             }}
           />
-          <button onClick={sendMessage}>Send</button>
+          <button onClick={handleSendMessage}>Send</button>
         </div>
       </div>
     </div>
