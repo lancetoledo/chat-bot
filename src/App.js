@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 // Import OpenAI module
 import openai from 'openai';
+import Sidebar from './components/Sidebar';
 
 function App() {
   // State hooks to manage input message and chat history
@@ -13,7 +14,7 @@ function App() {
     const initializeOpenAI = async () => { // Function to initialize OpenAI instance
       try {
         // Create OpenAI instance with provided API key
-        const instance = new openai.OpenAI({ apiKey: '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', dangerouslyAllowBrowser: true });
+        const instance = new openai.OpenAI({ apiKey: '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', dangerouslyAllowBrowser: true });
         console.log('OpenAI instance:', instance.chat.completions); // Log instance object to visualize what we need to access later
         setOpenaiInstance(instance); // Set OpenAI instance in state
       } catch (error) {
@@ -74,7 +75,7 @@ function App() {
       // Call function to send message with STATIC response
       staticSendMessage(inputMessage);
       //Call function to send message with chatGPT API
-      sendMessage(inputMessage)
+      // sendMessage(inputMessage)
       setInputMessage(''); // Clear input message when done
     }
   };
@@ -91,27 +92,30 @@ function App() {
       <header className="App-header">
         <h1>Discord Direct Messages</h1>
       </header>
-      <div className="chat-container">
-        <div id="chat-history" className="chat-history">
-          {chatHistory.map((chat, index) => (
-            <div key={index} className={`message ${chat.sender === 'You' ? 'user' : 'bot'}`}>
-              <span className="sender">{chat.sender}:</span> {chat.message}
-            </div>
-          ))}
-        </div>
-        <div className="message-input">
-          <input
-            type="text"
-            placeholder="Type a message..."
-            value={inputMessage}
-            onChange={(e) => setInputMessage(e.target.value)}
-            onKeyPress={(e) => {
-              if (e.key === 'Enter') {
-                handleSendMessage();
-              }
-            }}
-          />
-          <button onClick={handleSendMessage}>Send</button>
+      <div className='main-container'>
+        < Sidebar />
+        <div className="chat-container">
+          <div id="chat-history" className="chat-history">
+            {chatHistory.map((chat, index) => (
+              <div key={index} className={`message ${chat.sender === 'You' ? 'user' : 'bot'}`}>
+                <span className="sender">{chat.sender}:</span> {chat.message}
+              </div>
+            ))}
+          </div>
+          <div className="message-input">
+            <input
+              type="text"
+              placeholder="Type a message..."
+              value={inputMessage}
+              onChange={(e) => setInputMessage(e.target.value)}
+              onKeyPress={(e) => {
+                if (e.key === 'Enter') {
+                  handleSendMessage();
+                }
+              }}
+            />
+            <button onClick={handleSendMessage}>Send</button>
+          </div>
         </div>
       </div>
     </div>
