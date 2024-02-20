@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 
+
 function App() {
   const [inputMessage, setInputMessage] = useState('');
   const [chatHistory, setChatHistory] = useState([]);
@@ -20,9 +21,9 @@ function App() {
   const sendMessage = async () => {
     if (inputMessage.trim() !== '') {
       const userMessage = { sender: 'You', message: inputMessage };
-      setChatHistory([...chatHistory, userMessage]);
-      const botReply = await getChatbotReply(inputMessage);
-      setChatHistory([...chatHistory, botReply]);
+      setChatHistory(prevHistory => [...prevHistory, userMessage]); // Update user's message first
+      const botReply = await getChatbotReply(inputMessage); // Get bot's reply
+      setChatHistory(prevHistory => [...prevHistory, botReply]); // Update chat history with bot's reply
       setInputMessage('');
     }
   };
