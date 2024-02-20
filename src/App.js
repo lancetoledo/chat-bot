@@ -1,10 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import OpenAI from 'openai'
 
 
 function App() {
+  const temp = "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"
   const [inputMessage, setInputMessage] = useState('');
   const [chatHistory, setChatHistory] = useState([]);
+
+  const openai = new OpenAI({ apiKey: temp, dangerouslyAllowBrowser: true })
+  async function main() {
+    const completion = await openai.chat.completions.create({
+      messages: [{ role: "system", content: "You are a helpful assistant." }],
+      model: "gpt-3.5-turbo",
+    });
+
+    console.log(completion.choices[0]);
+  }
+
+  // main();
+
+  useEffect(() => {
+    main()
+  }, [])
 
   // Simulated chatbot AI reply function
   const getChatbotReply = async (message) => {
