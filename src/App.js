@@ -44,6 +44,26 @@ function App() {
     }
   };
 
+  // Simulated chatbot AI reply function
+  const getChatbotReply = async (message) => {
+    // Here, you would typically send the message to a backend/API to get a reply from the chatbot AI.
+    // For this example, let's simulate a reply after a short delay.
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve({ sender: 'ChatBot', message: `You said: "${message}"` });
+      }, 1000);
+    });
+  };
+
+  // Function to handle static version 
+  const staticSendMessage = async () => {
+    if (inputMessage.trim() !== '') {
+      const botReply = await getChatbotReply(inputMessage); // Get bot's reply
+      setChatHistory(prevHistory => [...prevHistory, botReply]); // Update chat history with bot's reply
+      setInputMessage('');
+    }
+  };
+
 
 
 
@@ -51,7 +71,7 @@ function App() {
     if (inputMessage.trim() !== '') {
       const userMessage = { sender: 'You', message: inputMessage };
       setChatHistory(prevHistory => [...prevHistory, userMessage]);
-      sendMessage(inputMessage);
+      staticSendMessage(inputMessage);
       setInputMessage('');
     }
   };
