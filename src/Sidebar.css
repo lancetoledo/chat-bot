@@ -4,14 +4,21 @@
     background-color: #2f3136;
     color: #fff;
     width: 10%;
-    height: 1160px;
-    padding: 20px;
+    height: 1200px;
+
 }
 
 .user-profile {
     display: flex;
     align-items: center;
     margin-bottom: 20px;
+    width: 100%;
+    padding: 10px 20px 10px 20px;
+}
+
+.user-profile:hover {
+    background-color: #4f545c;
+    cursor: pointer;
 }
 
 .profile-picture {
