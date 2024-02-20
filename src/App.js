@@ -71,8 +71,10 @@ function App() {
     if (inputMessage.trim() !== '') { // Check if input message is not empty
       const userMessage = { sender: 'You', message: inputMessage }; // Define user message object
       setChatHistory(prevHistory => [...prevHistory, userMessage]); // Update chat history with user's message
-      // Change this to make it static or use the API
-      staticSendMessage(inputMessage); // Call function to send message (static or API)
+      // Call function to send message with STATIC response
+      staticSendMessage(inputMessage);
+      //Call function to send message with chatGPT API
+      sendMessage(inputMessage)
       setInputMessage(''); // Clear input message when done
     }
   };
