@@ -1,53 +1,56 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
+// Import OpenAI module
 import openai from 'openai';
 
 function App() {
-  const [inputMessage, setInputMessage] = useState('');
-  const [chatHistory, setChatHistory] = useState([]);
-  const [openaiInstance, setOpenaiInstance] = useState(null);
+  // State hooks to manage input message and chat history
+  const [inputMessage, setInputMessage] = useState(''); // State for input message
+  const [chatHistory, setChatHistory] = useState([]); // State for chat history
+  const [openaiInstance, setOpenaiInstance] = useState(null); // State for OpenAI instance
 
-  useEffect(() => {
-    // Initialize the OpenAI instance with your API key
-    const initializeOpenAI = async () => {
+  useEffect(() => { // Effect hook to initialize OpenAI instance
+    const initializeOpenAI = async () => { // Function to initialize OpenAI instance
       try {
-        const instance = new openai.OpenAI({ apiKey: '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', dangerouslyAllowBrowser: true }); // Replace with your actual OpenAI API key
-        console.log('OpenAI instance:', instance.chat.completions); // Check the instance object
-        setOpenaiInstance(instance);
+        // Create OpenAI instance with provided API key
+        const instance = new openai.OpenAI({ apiKey: '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', dangerouslyAllowBrowser: true });
+        console.log('OpenAI instance:', instance.chat.completions); // Log instance object to visualize what we need to access later
+        setOpenaiInstance(instance); // Set OpenAI instance in state
       } catch (error) {
-        console.error('Error initializing OpenAI:', error);
+        console.error('Error initializing OpenAI:', error); // Log error if initialization fails
       }
     };
 
-    initializeOpenAI();
-  }, []);
+    initializeOpenAI(); // Call function to initialize OpenAI instance
+  }, []); // Empty dependency array to run effect only once after initial render
 
+  // Function to send message to OpenAI chatbot
   const sendMessage = async (message) => {
-    if (openaiInstance && message.trim() !== '') {
+    if (openaiInstance && message.trim() !== '') { // Check if OpenAI instance is initialized and message is not empty
       try {
+        // Send message to OpenAI chatbot and await response
         const response = await openaiInstance.chat.completions.create({
-          model: "gpt-3.5-turbo",
-          messages: [{ role: 'user', content: message }],
+          model: "gpt-3.5-turbo", // Choose the model
+          messages: [{ role: 'user', content: message }], // Define user message
         });
-        console.log('Response:', response); // Log the entire response object
-        console.log('Response data:', response.choices); // Log the data object
-        const choices = response.choices;
-        if (choices && choices.length > 0) {
-          const botReply = choices[0].message.content.trim();
-          setChatHistory(prevHistory => [...prevHistory, { sender: 'ChatBot', message: botReply }]);
+        console.log('Response:', response); // Log the entire response object to understand what OpenAi gives back
+        console.log('Response data:', response.choices); // Log the data object which contains message
+        const choices = response.choices; // Extract choices from response
+        if (choices && choices.length > 0) { // Check if choices array is not empty
+          const botReply = choices[0].message.content.trim(); // Extract bot's reply from choices
+          setChatHistory(prevHistory => [...prevHistory, { sender: 'ChatBot', message: botReply }]); // Update chat history with bot's reply
         } else {
-          console.error('Error: Choices array is empty or undefined');
+          console.error('Error: Choices array is empty or undefined'); // Log error if choices array is empty
         }
       } catch (error) {
-        console.error('Error generating bot reply:', error);
+        console.error('Error generating bot reply:', error); // Log error if generating bot reply fails
       }
     }
   };
 
-  // Simulated chatbot AI reply function
+  // Simulated chatbot AI reply function for static version
   const getChatbotReply = async (message) => {
-    // Here, you would typically send the message to a backend/API to get a reply from the chatbot AI.
-    // For this example, let's simulate a reply after a short delay.
+    // Simulate delay and return a static response
     return new Promise(resolve => {
       setTimeout(() => {
         resolve({ sender: 'ChatBot', message: `You said: "${message}"` });
@@ -55,34 +58,31 @@ function App() {
     });
   };
 
-  // Function to handle static version 
-  const staticSendMessage = async () => {
-    if (inputMessage.trim() !== '') {
+  // Function to handle static version
+  const staticSendMessage = async () => { // Function to send message in static version
+    if (inputMessage.trim() !== '') { // Check if input message is not empty
       const botReply = await getChatbotReply(inputMessage); // Get bot's reply
       setChatHistory(prevHistory => [...prevHistory, botReply]); // Update chat history with bot's reply
-      setInputMessage('');
+      setInputMessage(''); // Clear input message
     }
   };
-
-
-
-
+  // Function to handle sending message whether its static or utlizing the API
   const handleSendMessage = () => {
-    if (inputMessage.trim() !== '') {
-      const userMessage = { sender: 'You', message: inputMessage };
-      setChatHistory(prevHistory => [...prevHistory, userMessage]);
-      staticSendMessage(inputMessage);
-      setInputMessage('');
+    if (inputMessage.trim() !== '') { // Check if input message is not empty
+      const userMessage = { sender: 'You', message: inputMessage }; // Define user message object
+      setChatHistory(prevHistory => [...prevHistory, userMessage]); // Update chat history with user's message
+      // Change this to make it static or use the API
+      staticSendMessage(inputMessage); // Call function to send message (static or API)
+      setInputMessage(''); // Clear input message when done
     }
   };
 
-  useEffect(() => {
-    // Scroll to the bottom of the chat history when it updates
-    const chatHistoryElement = document.getElementById('chat-history');
-    if (chatHistoryElement) {
-      chatHistoryElement.scrollTop = chatHistoryElement.scrollHeight;
+  useEffect(() => { // Effect hook to scroll chat history to bottom
+    const chatHistoryElement = document.getElementById('chat-history'); // Get chat history element
+    if (chatHistoryElement) { // Check if chat history element exists
+      chatHistoryElement.scrollTop = chatHistoryElement.scrollHeight; // Scroll chat history to bottom
     }
-  }, [chatHistory]);
+  }, [chatHistory]); // Dependency array to run effect when chat history changes
 
   return (
     <div className="App">
