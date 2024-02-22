@@ -4,7 +4,13 @@ import './App.css';
 import openai from 'openai';
 import Sidebar from './components/Sidebar';
 
+// Load environment variables from .env file using `esm`
+import dotenv from 'dotenv';
+dotenv.config();
+
 function App() {
+
+  console.log(process.env.REACT_APP_API_KEY)
   // State hooks to manage input message and chat history
   const [inputMessage, setInputMessage] = useState(''); // State for input message
   const [chatHistory, setChatHistory] = useState([]); // State for chat history
