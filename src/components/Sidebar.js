@@ -12,18 +12,19 @@ import swift from '../images/swift.jpg'
 import smith from '../images/willsmith.jpg'
 import harvey from '../images/steveharvey.jpg'
 
-const Sidebar = () => {
+const Sidebar = ({ changeChat }) => {
+    console.log(changeChat)
     return (
         <div className="sidebar">
-            <User pfp={chatgpt} username={"Chat GPT"} />
-            <User pfp={lance} username={"Lance Toledo"} />
-            <User pfp={jessy} username={"Jessy The"} />
-            <User pfp={smith} username={"Will Smith"} />
-            <User pfp={keanu} username={"Keanu Reeves"} />
-            <User pfp={swift} username={"Taylor Swift"} />
-            <User pfp={curry} username={"Stephen Curry"} />
-            <User pfp={obama} username={"Barack Obama"} />
-            <User pfp={harvey} username={"Steve Harvey"} />
+            <User pfp={chatgpt} username={"Chat GPT"} changeChat={changeChat} />
+            <User pfp={lance} username={"Lance Toledo"} changeChat={changeChat} />
+            <User pfp={jessy} username={"Jessy The"} changeChat={changeChat} />
+            <User pfp={smith} username={"Will Smith"} changeChat={changeChat} />
+            <User pfp={keanu} username={"Keanu Reeves"} changeChat={changeChat} />
+            <User pfp={swift} username={"Taylor Swift"} changeChat={changeChat} />
+            <User pfp={curry} username={"Stephen Curry"} changeChat={changeChat} />
+            <User pfp={obama} username={"Barack Obama"} changeChat={changeChat} />
+            <User pfp={harvey} username={"Steve Harvey"} changeChat={changeChat} />
         </div>
     );
 }

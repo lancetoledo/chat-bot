@@ -5,12 +5,12 @@ import openai from 'openai';
 import Sidebar from './components/Sidebar';
 
 // Load environment variables from .env file using `esm`
-import dotenv from 'dotenv';
-dotenv.config();
+// import dotenv from 'dotenv';
+// dotenv.config();
 
 function App() {
 
-  console.log(process.env.REACT_APP_API_KEY)
+  // console.log(process.env.REACT_APP_API_KEY)
   // State hooks to manage input message and chat history
   const [inputMessage, setInputMessage] = useState(''); // State for input message
   const [chatHistory, setChatHistory] = useState([]); // State for chat history
@@ -20,7 +20,7 @@ function App() {
     const initializeOpenAI = async () => { // Function to initialize OpenAI instance
       try {
         // Create OpenAI instance with provided API key
-        const instance = new openai.OpenAI({ apiKey: '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', dangerouslyAllowBrowser: true });
+        const instance = new openai.OpenAI({ apiKey: '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', dangerouslyAllowBrowser: true });
         console.log('OpenAI instance:', instance.chat.completions); // Log instance object to visualize what we need to access later
         setOpenaiInstance(instance); // Set OpenAI instance in state
       } catch (error) {
@@ -93,13 +93,17 @@ function App() {
     }
   }, [chatHistory]); // Dependency array to run effect when chat history changes
 
+  const changeChat = () => {
+    console.log("You clicked ")
+  }
+
   return (
     <div className="App">
       <header className="App-header">
         <h1>Discord Direct Messages</h1>
       </header>
       <div className='main-container'>
-        < Sidebar />
+        < Sidebar changeChat={changeChat} />
         <div className="chat-container">
           <div id="chat-history" className="chat-history">
             {chatHistory.map((chat, index) => (
