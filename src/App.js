@@ -7,6 +7,7 @@ import Sidebar from './components/Sidebar';
 // Load environment variables from .env file using `esm`
 // import dotenv from 'dotenv';
 // dotenv.config();
+// Try setting up polyfills
 
 function App() {
 
@@ -99,35 +100,7 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>Discord Direct Messages</h1>
-      </header>
-      <div className='main-container'>
-        < Sidebar changeChat={changeChat} />
-        <div className="chat-container">
-          <div id="chat-history" className="chat-history">
-            {chatHistory.map((chat, index) => (
-              <div key={index} className={`message ${chat.sender === 'You' ? 'user' : 'bot'}`}>
-                <span className="sender">{chat.sender}:</span> {chat.message}
-              </div>
-            ))}
-          </div>
-          <div className="message-input">
-            <input
-              type="text"
-              placeholder="Type a message..."
-              value={inputMessage}
-              onChange={(e) => setInputMessage(e.target.value)}
-              onKeyPress={(e) => {
-                if (e.key === 'Enter') {
-                  handleSendMessage();
-                }
-              }}
-            />
-            <button onClick={handleSendMessage}>Send</button>
-          </div>
-        </div>
-      </div>
+
     </div>
   );
 }
